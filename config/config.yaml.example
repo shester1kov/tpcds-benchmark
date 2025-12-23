@@ -1,0 +1,157 @@
+cert_path: "./cacerts.pem"
+queries_path: "./tpcds_simple_queries"
+results_path: "./results/benchmark_results.csv"
+timeout: "5m"
+connection_timeout: "5m"
+runs: 1
+concurrency: 1 # (1 = последовательно)
+
+connection_retries: 6
+retry_delay: "2s"
+
+
+schema: tpcds_sf1
+
+warehouses:
+  # Trino - Hive catalog
+  - name: trino-hive
+    type: trino
+    enabled: true
+    connection:
+      host: your-trino-host.local
+      port: 18188
+      username: your-username@DOMAIN.LOCAL
+      password: your-password
+      database: hive-catalog
+      use_tls: true
+
+  # Trino - Iceberg catalog
+  - name: trino-iceberg
+    type: trino
+    enabled: true
+    table_type: iceberg
+    connection:
+      host: your-trino-host.local
+      port: 18188
+      username: your-username@DOMAIN.LOCAL
+      password: your-password
+      database: iceberg-catalog
+      use_tls: true
+
+  # Trino - Vertica
+  - name: trino-vertica
+    type: trino
+    enabled: false
+    connection:
+      host: your-trino-host.local
+      port: 18188
+      username: your-username@DOMAIN.LOCAL
+      password: your-password
+      database: vertica
+      use_tls: true
+
+  # Hive - standard tables
+  - name: hive-standard
+    type: hive
+    enabled: true
+    connection:
+      username: your-username
+      password: your-password
+      use_tls: true
+      zk_quorum: zk-host1:2181,zk-host2:2181,zk-host3:2181
+      zk_namespace: your/zookeeper/namespace
+      hive_config:
+        kyuubi.engine.type: "HIVE_SQL"
+        tez.counters.max: "2000"
+        tez.counters.max.groups: "2000"
+        mapreduce.job.counters.max: "2000"
+        hive.exec.dynamic.partition.mode: "nonstrict"
+
+
+  # Hive - iceberg tables
+  - name: hive-iceberg
+    type: hive
+    enabled: false
+    table_type: iceberg
+    connection:
+      zk_quorum: "zk-host1:2181,zk-host2:2181,zk-host3:2181"
+      zk_namespace: "your/zookeeper/namespace"
+      username: your-username
+      password: your-password
+      use_tls: true
+      hive_config:
+        kyuubi.engine.type: "HIVE_SQL"
+        tez.counters.max: "2000"
+        tez.counters.max.groups: "2000"
+        mapreduce.job.counters.max: "2000"
+        hive.exec.dynamic.partition.mode: "nonstrict"
+
+  # Spark - standard tables
+  - name: spark-standard
+    type: spark
+    enabled: false
+    connection:
+      zk_quorum: "zk-host1:2181,zk-host2:2181,zk-host3:2181"
+      zk_namespace: "your/zookeeper/namespace"
+      username: your-username
+      password: your-password
+      use_tls: true
+      hive_config:
+        tez.counters.max: "2000"
+        tez.counters.max.groups: "2000"
+        mapreduce.job.counters.max: "2000"
+        hive.exec.dynamic.partition.mode: "nonstrict"
+
+
+  # Spark - iceberg tables
+  - name: spark-iceberg
+    type: spark
+    enabled: false
+    table_type: iceberg
+    connection:
+      zk_quorum: "zk-host1:2181,zk-host2:2181,zk-host3:2181"
+      zk_namespace: "your/zookeeper/namespace"
+      username: your-username
+      password: your-password
+      use_tls: true
+      hive_config:
+        tez.counters.max: "2000"
+        tez.counters.max.groups: "2000"
+        mapreduce.job.counters.max: "2000"
+        hive.exec.dynamic.partition.mode: "nonstrict"
+
+  # Impala - standard tables
+  - name: impala-standard
+    type: impala
+    enabled: false
+    connection:
+      host: your-impala-host.local
+      port: "21050"
+      username: your-username
+      password: your-password
+      use_tls: true
+
+  # Impala - iceberg tables
+  - name: impala-iceberg
+    type: impala
+    enabled: false
+    table_type: iceberg
+    connection:
+      host: your-impala-host.local
+      port: "21050"
+      username: your-username
+      password: your-password
+      use_tls: true
+
+    # Vertica
+  - name: vertica
+    type: vertica
+    enabled: false
+    connection:
+      host: your-vertica-host.local
+      port: "5433"
+      username: your-username
+      password: your-password
+      database: your-database
+
+
