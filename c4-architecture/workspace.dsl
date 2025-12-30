@@ -21,12 +21,12 @@ workspace "TPC-DS Benchmark System" "Architecture of the TPC-DS Benchmark Tool f
 
                 configLoader = component "Config Loader" "Загрузка и валидация конфигурации из YAML файла" "Go package: config"
 
-                connectionManager = component "Connection Manager" "Управление подключениями к БД с поддержкой retry и TLS" "Go package: connection" {
-                    trinoConnector = component "Trino Connector" "Подключение к Trino через SQL драйвер" "Go"
-                    hiveConnector = component "Hive Connector" "Подключение к Hive/Spark через Thrift" "Go"
-                    impalaConnector = component "Impala Connector" "Подключение к Impala" "Go"
-                    verticaConnector = component "Vertica Connector" "Подключение к Vertica" "Go"
-                }
+                connectionManager = component "Connection Manager" "Управление подключениями к БД с поддержкой retry и TLS" "Go package: connection"
+
+                trinoConnector = component "Trino Connector" "Подключение к Trino через SQL драйвер" "Go"
+                hiveConnector = component "Hive Connector" "Подключение к Hive/Spark через Thrift" "Go"
+                impalaConnector = component "Impala Connector" "Подключение к Impala" "Go"
+                verticaConnector = component "Vertica Connector" "Подключение к Vertica" "Go"
 
                 executorFactory = component "Executor Factory" "Фабрика для создания исполнителей запросов" "Go package: executor"
 
@@ -120,16 +120,19 @@ workspace "TPC-DS Benchmark System" "Architecture of the TPC-DS Benchmark Tool f
             description "Компоненты CLI приложения: управление конфигурацией, подключениями, выполнением запросов и хранением результатов"
         }
 
-        # 4. Component диаграмма - Connection Manager детально
-        component connectionManager "ConnectionManagerComponents" {
-            include *
-            include cliApp
+        # 4. Filtered component диаграмма - Connection Manager и коннекторы
+        component cliApp "ConnectionManagerView" {
+            include connectionManager
+            include trinoConnector
+            include hiveConnector
+            include impalaConnector
+            include verticaConnector
             include trinoWarehouse
             include hiveWarehouse
             include impalaWarehouse
             include verticaWarehouse
             autoLayout lr
-            description "Детальная архитектура Connection Manager с коннекторами для различных БД"
+            description "Connection Manager и database-специфичные коннекторы"
         }
 
         # 5. Dynamic диаграмма - поток выполнения бенчмарка
@@ -154,7 +157,7 @@ workspace "TPC-DS Benchmark System" "Architecture of the TPC-DS Benchmark Tool f
             autoLayout lr
         }
 
-        # Deployment диаграмма
+        # 6. Deployment диаграмма
         deployment tpcdsBenchmark "Production" "Production" {
             deploymentNode "User Workstation" "" "Linux/macOS/Windows" {
                 deploymentNode "Go Runtime" "" "Go 1.25+" {

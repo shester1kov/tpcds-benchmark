@@ -38,14 +38,15 @@ c4-architecture/
 - Main Controller
 - Config Loader
 - Connection Manager
+- Database Connectors (Trino, Hive, Impala, Vertica)
 - Executor Factory
 - SQL/Hive Executors
 - Query Loader
 - Benchmark Runner
 - CSV Storage
 
-### 4. **Connection Manager Components**
-Детальная диаграмма Connection Manager с коннекторами для каждой БД.
+### 4. **Connection Manager View** (Отфильтрованная компонентная диаграмма)
+Фокусируется на Connection Manager и database-специфичных коннекторах, показывая их взаимодействие с внешними хранилищами данных.
 
 ### 5. **Benchmark Execution Flow** (Динамическая диаграмма)
 Показывает последовательность выполнения бенчмарка от запуска до сохранения результатов.
@@ -203,7 +204,7 @@ structurizr-cli export -workspace workspace.dsl -format plantuml
 - System Context
 - Containers
 - Components
-- Connection Manager Components
+- Connection Manager View
 - Benchmark Execution Flow
 - Production Deployment
 
