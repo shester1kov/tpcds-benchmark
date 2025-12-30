@@ -1,0 +1,24 @@
+@startuml TPC-DS Benchmark System Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title System Context Diagram for TPC-DS Benchmark System
+
+Person(user, "Data Engineer / DBA", "Специалист, который запускает бенчмарки для оценки производительности хранилищ данных")
+
+System(tpcdsBenchmark, "TPC-DS Benchmark System", "Система для выполнения TPC-DS бенчмарков на различных хранилищах данных")
+
+System_Ext(trinoWarehouse, "Trino Data Warehouse", "Распределенное SQL хранилище данных Trino")
+System_Ext(hiveWarehouse, "Hive Data Warehouse", "Apache Hive хранилище данных с поддержкой HiveSQL и Spark")
+System_Ext(impalaWarehouse, "Impala Data Warehouse", "Cloudera Impala MPP SQL движок")
+System_Ext(verticaWarehouse, "Vertica Data Warehouse", "Vertica аналитическая СУБД")
+
+Rel(user, tpcdsBenchmark, "Запускает бенчмарки, настраивает конфигурацию")
+
+Rel(tpcdsBenchmark, trinoWarehouse, "Выполняет TPC-DS запросы", "SQL/HTTPS")
+Rel(tpcdsBenchmark, hiveWarehouse, "Выполняет TPC-DS запросы", "HiveServer2/Thrift")
+Rel(tpcdsBenchmark, impalaWarehouse, "Выполняет TPC-DS запросы", "SQL")
+Rel(tpcdsBenchmark, verticaWarehouse, "Выполняет TPC-DS запросы", "SQL")
+
+@enduml

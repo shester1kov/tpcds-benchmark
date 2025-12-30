@@ -1,0 +1,92 @@
+@startuml Benchmark Execution Flow
+!theme plain
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+title TPC-DS Benchmark Execution Flow
+
+actor "Data Engineer" as User
+participant "Main Controller" as Main
+participant "Config Loader" as Config
+participant "Connection Manager" as ConnMgr
+participant "Benchmark Runner" as Runner
+participant "Query Loader" as QLoader
+participant "Executor Factory" as Factory
+participant "SQL Executor" as SQLExec
+database "Config File" as ConfigFile
+database "Queries Storage" as Queries
+database "Trino Warehouse" as Trino
+database "Results Storage" as Results
+
+User -> Main: Запуск приложения
+activate Main
+
+Main -> Config: LoadConfig()
+activate Config
+Config -> ConfigFile: Читает YAML
+ConfigFile --> Config: Configuration
+Config --> Main: Config
+deactivate Config
+
+Main -> ConnMgr: NewConnectionManager(config)
+activate ConnMgr
+ConnMgr --> Main: ConnectionManager
+deactivate ConnMgr
+
+Main -> Runner: NewBenchmarkRunner(config, connMgr)
+activate Runner
+
+Runner -> QLoader: LoadAll()
+activate QLoader
+QLoader -> Queries: Читает .sql файлы
+Queries --> QLoader: SQL queries
+QLoader --> Runner: []Query
+deactivate QLoader
+
+Runner --> Main: BenchmarkRunner
+deactivate Runner
+
+Main -> Runner: Run()
+activate Runner
+
+loop Для каждого warehouse
+    Runner -> Factory: CreateExecutor(warehouse)
+    activate Factory
+    Factory -> ConnMgr: GetConnection(warehouse)
+    activate ConnMgr
+
+    alt Trino
+        ConnMgr -> Trino: Устанавливает SQL соединение
+        Trino --> ConnMgr: Connection
+    end
+
+    ConnMgr --> Factory: Connection
+    deactivate ConnMgr
+    Factory --> Runner: Executor
+    deactivate Factory
+
+    par Многопоточное выполнение
+        loop Для каждого запроса * runs
+            Runner -> SQLExec: Execute(ctx, query, schema)
+            activate SQLExec
+            SQLExec -> Trino: Отправляет SQL запрос
+            Trino --> SQLExec: Query results
+            SQLExec --> Runner: QueryResult
+            deactivate SQLExec
+
+            Runner -> Results: Save(BenchmarkResult)
+            activate Results
+            Results --> Runner: OK
+            deactivate Results
+        end
+    end
+end
+
+Runner --> Main: nil (success)
+deactivate Runner
+
+Main -> User: "Бенчмарк завершен"
+deactivate Main
+
+@enduml

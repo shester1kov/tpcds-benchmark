@@ -1,0 +1,79 @@
+@startuml TPC-DS Benchmark Components
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_TOP_DOWN()
+
+title Component Diagram for TPC-DS Benchmark CLI Application
+
+Container_Boundary(cliApp, "CLI Application") {
+    Component(mainController, "Main Controller", "Go: main", "Точка входа, инициализация системы и обработка сигналов")
+
+    Component(configLoader, "Config Loader", "Go: config", "Загрузка и валидация YAML конфигурации")
+
+    Component(connectionManager, "Connection Manager", "Go: connection", "Управление подключениями с retry и TLS")
+
+    Component(trinoConnector, "Trino Connector", "Go", "Подключение к Trino")
+    Component(hiveConnector, "Hive Connector", "Go", "Подключение к Hive/Spark")
+    Component(impalaConnector, "Impala Connector", "Go", "Подключение к Impala")
+    Component(verticaConnector, "Vertica Connector", "Go", "Подключение к Vertica")
+
+    Component(executorFactory, "Executor Factory", "Go: executor", "Фабрика для создания исполнителей")
+
+    Component(sqlExecutor, "SQL Executor", "Go: executor", "Исполнитель для Trino, Vertica, Impala")
+    Component(hiveExecutor, "Hive Executor", "Go: executor", "Исполнитель для Hive/Spark")
+
+    Component(queryLoader, "Query Loader", "Go: query", "Загрузка TPC-DS запросов")
+
+    Component(benchmarkRunner, "Benchmark Runner", "Go: runner", "Оркестратор выполнения с многопоточностью")
+
+    Component(csvStorage, "CSV Storage", "Go: storage", "Потокобезопасное сохранение результатов")
+}
+
+ContainerDb(configFile, "Config File", "YAML")
+ContainerDb(queriesStorage, "Queries", "File System")
+ContainerDb(resultsStorage, "Results", "CSV")
+
+System_Ext(trinoWarehouse, "Trino")
+System_Ext(hiveWarehouse, "Hive/Spark")
+System_Ext(impalaWarehouse, "Impala")
+System_Ext(verticaWarehouse, "Vertica")
+
+' Main flow
+Rel(mainController, configLoader, "Загружает конфигурацию")
+Rel(mainController, connectionManager, "Создает")
+Rel(mainController, benchmarkRunner, "Запускает")
+
+' Benchmark Runner
+Rel(benchmarkRunner, executorFactory, "Создает executors")
+Rel(benchmarkRunner, queryLoader, "Загружает запросы")
+Rel(benchmarkRunner, csvStorage, "Сохраняет результаты")
+Rel(benchmarkRunner, sqlExecutor, "Выполняет SQL запросы")
+Rel(benchmarkRunner, hiveExecutor, "Выполняет Hive запросы")
+
+' Executor Factory
+Rel(executorFactory, sqlExecutor, "Создает")
+Rel(executorFactory, hiveExecutor, "Создает")
+Rel(executorFactory, connectionManager, "Получает соединения")
+
+' Executors
+Rel(sqlExecutor, connectionManager, "Использует SQL соединения")
+Rel(hiveExecutor, connectionManager, "Использует Hive соединения")
+
+' Connection Manager
+Rel(connectionManager, trinoConnector, "Делегирует")
+Rel(connectionManager, hiveConnector, "Делегирует")
+Rel(connectionManager, impalaConnector, "Делегирует")
+Rel(connectionManager, verticaConnector, "Делегирует")
+
+' Connectors to warehouses
+Rel(trinoConnector, trinoWarehouse, "Подключается", "SQL/HTTPS")
+Rel(hiveConnector, hiveWarehouse, "Подключается", "Thrift")
+Rel(impalaConnector, impalaWarehouse, "Подключается", "SQL")
+Rel(verticaConnector, verticaWarehouse, "Подключается", "SQL")
+
+' External resources
+Rel(configLoader, configFile, "Читает", "File I/O")
+Rel(queryLoader, queriesStorage, "Читает .sql", "File I/O")
+Rel(csvStorage, resultsStorage, "Записывает", "File I/O")
+
+@enduml

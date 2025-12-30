@@ -1,0 +1,33 @@
+@startuml TPC-DS Benchmark Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Container Diagram for TPC-DS Benchmark System
+
+Person(user, "Data Engineer / DBA", "Специалист, который запускает бенчмарки")
+
+System_Boundary(tpcdsBenchmark, "TPC-DS Benchmark System") {
+    Container(cliApp, "CLI Application", "Go", "Консольное приложение для запуска бенчмарков")
+    ContainerDb(configFile, "Configuration File", "YAML", "Конфигурация подключений и параметров бенчмарков")
+    ContainerDb(queriesStorage, "Queries Storage", "File System", "Директории с TPC-DS SQL запросами разной сложности")
+    ContainerDb(resultsStorage, "Results Storage", "CSV", "CSV файл с результатами бенчмарков")
+}
+
+System_Ext(trinoWarehouse, "Trino", "Trino Data Warehouse")
+System_Ext(hiveWarehouse, "Hive/Spark", "Hive Data Warehouse")
+System_Ext(impalaWarehouse, "Impala", "Impala MPP Engine")
+System_Ext(verticaWarehouse, "Vertica", "Vertica Database")
+
+Rel(user, cliApp, "Запускает", "CLI")
+
+Rel(cliApp, configFile, "Читает конфигурацию", "File I/O")
+Rel(cliApp, queriesStorage, "Загружает SQL запросы", "File I/O")
+Rel(cliApp, resultsStorage, "Записывает результаты", "File I/O")
+
+Rel(cliApp, trinoWarehouse, "Выполняет запросы", "SQL/HTTPS")
+Rel(cliApp, hiveWarehouse, "Выполняет запросы", "Thrift")
+Rel(cliApp, impalaWarehouse, "Выполняет запросы", "SQL")
+Rel(cliApp, verticaWarehouse, "Выполняет запросы", "SQL")
+
+@enduml
