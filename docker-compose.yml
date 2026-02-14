@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Базовый сервис для запуска бенчмарка
+  tpcds-benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tpcds-benchmark:latest
+    container_name: tpcds-benchmark
+    volumes:
+      # Монтируем конфигурацию
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      # Монтируем запросы (можно выбирать разные наборы)
+      - ./tpcds_simple_queries:/app/queries:ro
+      # Монтируем директорию для результатов
+      - ./results:/app/results
+      # Опционально: монтируем сертификаты для TLS
+      # - ./certs/cacerts.pem:/app/certs/cacerts.pem:ro
+    environment:
+      - TZ=Europe/Moscow
+    # Ограничения ресурсов (опционально)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '4.0'
+    #       memory: 8G
+    #     reservations:
+    #       cpus: '2.0'
+    #       memory: 4G
+
+  # Пример: запуск с простыми запросами
+  benchmark-simple:
+    extends: tpcds-benchmark
+    container_name: tpcds-benchmark-simple
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      - ./tpcds_simple_queries:/app/queries:ro
+      - ./results/simple:/app/results
+
+  # Пример: запуск со средними запросами
+  benchmark-mid:
+    extends: tpcds-benchmark
+    container_name: tpcds-benchmark-mid
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      - ./tpcds_mid_queries:/app/queries:ro
+      - ./results/mid:/app/results
+
+  # Пример: запуск со сложными запросами
+  benchmark-hard:
+    extends: tpcds-benchmark
+    container_name: tpcds-benchmark-hard
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      - ./tpcds_hard_queries:/app/queries:ro
+      - ./results/hard:/app/results
+
+  # Пример: запуск с хорошими запросами
+  benchmark-good:
+    extends: tpcds-benchmark
+    container_name: tpcds-benchmark-good
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      - ./tpcds_good_queries:/app/queries:ro
+      - ./results/good:/app/results
