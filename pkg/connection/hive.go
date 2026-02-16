@@ -24,8 +24,8 @@ func (cm *ConnectionManager) ConnectHive(cfg config.ConnectionConfig, engineType
 		hiveCfg.ZookeeperNamespace = cfg.ZKNamespace
 		hiveCfg.Database = database
 
-		if len(cfg.HiveConfig) > 0 {
-			hiveCfg.HiveConfiguration = cfg.HiveConfig
+		if len(cfg.Properties) > 0 {
+			hiveCfg.HiveConfiguration = cfg.Properties
 		} else if engineType != "" {
 			hiveCfg.HiveConfiguration = map[string]string{
 				"kyuubi.engine.type": engineType,

@@ -116,7 +116,7 @@ func testConnections(cfg *config.Config, connMgr *connection.ConnectionManager) 
 
 		case "hive":
 			engineType := "HIVE_SQL"
-			if hc, ok := wh.Connection.HiveConfig["kyuubi.engine.type"]; ok {
+			if hc, ok := wh.Connection.Properties["kyuubi.engine.type"]; ok {
 				engineType = hc
 			}
 
@@ -128,7 +128,7 @@ func testConnections(cfg *config.Config, connMgr *connection.ConnectionManager) 
 
 		case "spark":
 			engineType := ""
-			if hc, ok := wh.Connection.HiveConfig["kyuubi.engine.type"]; ok {
+			if hc, ok := wh.Connection.Properties["kyuubi.engine.type"]; ok {
 				engineType = hc
 			}
 

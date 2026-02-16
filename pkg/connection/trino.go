@@ -35,13 +35,11 @@ func (cm *ConnectionManager) ConnectTrino(cfg config.ConnectionConfig, schema st
 		)
 
 		trinoConfig := trino.Config{
-			ServerURI:        serverURI,
-			Catalog:          cfg.Database,
-			Schema:           schema,
-			CustomClientName: customClientName,
-			SessionProperties: map[string]string{
-				"query_max_execution_time": "30m",
-			},
+			ServerURI:         serverURI,
+			Catalog:           cfg.Database,
+			Schema:            schema,
+			CustomClientName:  customClientName,
+			SessionProperties: cfg.Properties,
 		}
 
 		dsn, err := trinoConfig.FormatDSN()

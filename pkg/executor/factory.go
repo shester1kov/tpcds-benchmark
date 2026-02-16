@@ -41,7 +41,7 @@ func CreateExecutor(
 		if wh.Type == "hive" {
 			engineType = "HIVE_SQL"
 		}
-		if hc, ok := wh.Connection.HiveConfig["kyuubi.engine.type"]; ok {
+		if hc, ok := wh.Connection.Properties["kyuubi.engine.type"]; ok {
 			engineType = hc
 		}
 

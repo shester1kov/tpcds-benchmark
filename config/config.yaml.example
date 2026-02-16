@@ -37,6 +37,10 @@ warehouses:
       password: your-password
       database: iceberg-catalog
       use_tls: true
+      properties:
+        query_max_execution_time: "30m"
+        query_max_memory_per_node: "8GB"
+        task_concurrency: "8"
 
   # Trino - Vertica
   - name: trino-vertica
@@ -49,6 +53,10 @@ warehouses:
       password: your-password
       database: vertica
       use_tls: true
+      properties:
+        query_max_execution_time: "30m"
+        query_max_memory_per_node: "8GB"
+        task_concurrency: "8"
 
   # Hive - standard tables
   - name: hive-standard
@@ -60,7 +68,7 @@ warehouses:
       use_tls: true
       zk_quorum: zk-host1:2181,zk-host2:2181,zk-host3:2181
       zk_namespace: your/zookeeper/namespace
-      hive_config:
+      properties:
         kyuubi.engine.type: "HIVE_SQL"
         tez.counters.max: "2000"
         tez.counters.max.groups: "2000"
@@ -79,7 +87,7 @@ warehouses:
       username: your-username
       password: your-password
       use_tls: true
-      hive_config:
+      properties:
         kyuubi.engine.type: "HIVE_SQL"
         tez.counters.max: "2000"
         tez.counters.max.groups: "2000"
@@ -96,7 +104,7 @@ warehouses:
       username: your-username
       password: your-password
       use_tls: true
-      hive_config:
+      properties:
         tez.counters.max: "2000"
         tez.counters.max.groups: "2000"
         mapreduce.job.counters.max: "2000"
@@ -114,7 +122,7 @@ warehouses:
       username: your-username
       password: your-password
       use_tls: true
-      hive_config:
+      properties:
         tez.counters.max: "2000"
         tez.counters.max.groups: "2000"
         mapreduce.job.counters.max: "2000"
@@ -130,6 +138,10 @@ warehouses:
       username: your-username
       password: your-password
       use_tls: true
+      properties:
+        MEM_LIMIT: "8GB"
+        MT_DOP: "8"
+        QUERY_TIMEOUT_S: "1800"
 
   # Impala - iceberg tables
   - name: impala-iceberg
@@ -142,6 +154,10 @@ warehouses:
       username: your-username
       password: your-password
       use_tls: true
+      properties:
+        MEM_LIMIT: "8GB"
+        MT_DOP: "8"
+        QUERY_TIMEOUT_S: "1800"
 
     # Vertica
   - name: vertica

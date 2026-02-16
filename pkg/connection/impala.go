@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"tpcds_benchmark/pkg/config"
 
 	"github.com/sclgo/impala-go"
@@ -54,6 +55,16 @@ func (cm *ConnectionManager) ConnectImpala(cfg config.ConnectionConfig, database
 			conn.Close()
 			db.Close()
 			return fmt.Errorf("impala USE %s failed: %w", database, err)
+		}
+
+		for key, value := range cfg.Properties {
+			ctx, cancel := context.WithTimeout(context.Background(), cm.connectionTimeout)
+			_, err := c.ExecContext(ctx, fmt.Sprintf("SET %s=%s", key, value))
+			cancel()
+
+			if err != nil {
+				log.Printf("WARNING: Failed to set %s=%s: %v", key, value, err)
+			}
 		}
 
 		conn = c

@@ -28,6 +28,8 @@ type WarehouseConfig struct {
 
 	TableType string `yaml:"table_type"`
 
+	StorageLocation string `yaml:"storage_location"`
+
 	//Параметры подключения
 	Connection ConnectionConfig `yaml:"connection"`
 }
@@ -43,14 +45,21 @@ type ConnectionConfig struct {
 	// Hive/Spark
 	ZKQuorum    string            `yaml:"zk_quorum,omitempty"`
 	ZKNamespace string            `yaml:"zk_namespace,omitempty"`
-	HiveConfig  map[string]string `yaml:"hive_config,omitempty"`
+	Properties  map[string]string `yaml:"properties,omitempty"`
 }
 
 func (w *WarehouseConfig) GetSchemaName(baseSchema string) string {
-	if w.TableType == "iceberg" {
-		return baseSchema + "_iceberg"
+
+	schema := baseSchema
+
+	if w.StorageLocation == "s3" {
+		schema = schema + "_s3"
 	}
-	return baseSchema
+
+	if w.TableType == "iceberg" {
+		schema = schema + "_iceberg"
+	}
+	return schema
 }
 
 func LoadConfig(path string) (*Config, error) {

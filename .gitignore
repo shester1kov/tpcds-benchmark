@@ -39,7 +39,7 @@ config/config.yaml
 cacerts.pem
 
 # Benchmark results and data
-results/
+results/*.csv
 benchmark_results*
 *.csv
 
@@ -73,3 +73,5 @@ tpcds all/
 .env
 .env.local
 .env.*.local
+
+testconn/*

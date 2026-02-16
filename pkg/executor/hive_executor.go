@@ -11,7 +11,7 @@ import (
 type HiveExecutor struct {
 	conn          *gohive.Connection
 	name          string
-	warehouseType string // trino, impala, vertica
+	warehouseType string // spark, hive
 }
 
 func NewHiveExecutor(conn *gohive.Connection, name, warehouseType string) *HiveExecutor {
