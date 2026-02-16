@@ -5,3 +5,5 @@ WORKDIR /app
 COPY . .
 
 RUN go build -mod=vendor -o tpcds-benchmark ./cmd/main.go
+
+ENTRYPOINT [ "/app/tpcds-benchmark" ]
