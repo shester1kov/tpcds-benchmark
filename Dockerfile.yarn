@@ -1,0 +1,28 @@
+FROM golang:1.25-alpine3.22 AS builder
+WORKDIR /build
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -mod=vendor \
+    -o tpcds-benchmark \
+    ./cmd/main.go
+
+FROM alpine:3.22
+ENV NB_USER=dyarn
+ENV NB_UID=1023
+ENV HOME=/home/${NB_USER}
+
+RUN adduser -D -u ${NB_UID} -h ${HOME} ${NB_USER}
+
+WORKDIR ${HOME}
+
+COPY --from=builder --chown=${NB_UID}:${NB_UID} /build/tpcds-benchmark ${HOME}/tpcds-benchmark
+
+RUN mkdir -p ${HOME}/config ${HOME}/queries ${HOME}/results && \
+    chown -R ${NB_USER}:${NB_USER} ${HOME}/config ${HOME}/queries ${HOME}/results && \
+    chmod +x ${HOME}/tpcds-benchmark
+
+USER ${NB_USER}
+
+VOLUME ["${HOME}/config", "${HOME}/queries", "${HOME}/results"]
+
+ENTRYPOINT [ "/home/dyarn/tpcds-benchmark" ]
