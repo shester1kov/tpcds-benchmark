@@ -75,3 +75,5 @@ tpcds all/
 .env.*.local
 
 testconn/*
+# OwnYourCode - personal career tracking
+ownyourcode/career/

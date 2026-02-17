@@ -19,6 +19,17 @@ type Config struct {
 	Concurrency       int               `yaml:"concurrency"`
 	ConnectionRetries int               `yaml:"connection_retries"`
 	RetryDelay        string            `yaml:"retry_delay"`
+	S3                *S3Config         `yaml:"s3_config"`
+}
+
+type S3Config struct {
+	Endpoint  string `yaml:"endpoint"`
+	AccessKey string `yaml:"access_key"`
+	SecretKey string `yaml:"secret_key"`
+	UseSSL    bool   `yaml:"use_ssl"`
+	Bucket    string `yaml:"bucket"`
+	Enabled   bool   `yaml:"enabled"`
+	Region    string `yaml:"region"`
 }
 
 type WarehouseConfig struct {
@@ -96,6 +107,24 @@ func (c *Config) Validate() error {
 
 	if c.ResultsPath == "" {
 		return fmt.Errorf("results_path не установлен")
+	}
+
+	if c.S3 != nil && c.S3.Enabled {
+		if c.S3.Endpoint == "" {
+			return fmt.Errorf("s3: endpoint не установлен")
+		}
+
+		if c.S3.AccessKey == "" {
+			return fmt.Errorf("s3: access_key не установлен")
+		}
+
+		if c.S3.SecretKey == "" {
+			return fmt.Errorf("s3: secret_key не установлен")
+		}
+
+		if c.S3.Bucket == "" {
+			return fmt.Errorf("s3: bucket не установлен")
+		}
 	}
 
 	if c.Runs < 1 {

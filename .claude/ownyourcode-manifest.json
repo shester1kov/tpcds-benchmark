@@ -1,0 +1,64 @@
+{
+  "version": "2.3.0",
+  "installed_at": "2026-02-17T07:05:39Z",
+  "claude_md_location": "./CLAUDE.md",
+  "backup_path": null,
+  "profile": {
+    "type": "junior",
+    "configured_at": "2026-02-17T00:00:00Z",
+    "settings": {
+      "background": "Some coding basics, not a complete beginner but not experienced either — somewhere in the middle",
+      "career_focus": "tips-only",
+      "design_involvement": true,
+      "analogies": {
+        "enabled": false,
+        "source": null
+      },
+      "previous_field": null,
+      "focus_area": null,
+      "position_title": null,
+      "target_company": null,
+      "teaching_style": null,
+      "feedback_style": null,
+      "pacing": null,
+      "personal_touch": null
+    }
+  },
+  "skills": [
+    "fundamentals/frontend",
+    "fundamentals/backend",
+    "fundamentals/security",
+    "fundamentals/performance",
+    "fundamentals/error-handling",
+    "fundamentals/engineering",
+    "fundamentals/database",
+    "fundamentals/testing",
+    "fundamentals/seo",
+    "fundamentals/accessibility",
+    "fundamentals/documentation",
+    "fundamentals/debugging",
+    "fundamentals/resistance",
+    "gates/ownership",
+    "gates/security",
+    "gates/error",
+    "gates/performance",
+    "gates/fundamentals",
+    "gates/testing",
+    "career/star-stories",
+    "career/resume-bullets",
+    "learned"
+  ],
+  "commands": [
+    "own/advise.md",
+    "own/docs.md",
+    "own/done.md",
+    "own/feature.md",
+    "own/guide.md",
+    "own/init.md",
+    "own/profile.md",
+    "own/retro.md",
+    "own/status.md",
+    "own/stuck.md",
+    "own/test.md"
+  ]
+}

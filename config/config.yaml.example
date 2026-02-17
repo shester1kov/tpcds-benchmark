@@ -12,6 +12,16 @@ retry_delay: "2s"
 
 schema: tpcds_sf1
 
+
+s3_config:
+  access_key: access_key
+  secret_key: secret_key
+  endpoint: example.com
+  bucket: bucket_name
+  use_ssl: true
+  enabled: true
+  region: ru-central-1
+
 warehouses:
   # Trino - Hive catalog
   - name: trino-hive

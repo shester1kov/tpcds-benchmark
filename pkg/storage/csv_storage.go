@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -27,34 +28,35 @@ type CSVStorage struct {
 	filepath string
 	mu       sync.Mutex
 	writer   *csv.Writer
-	file     os.File
+	file     *os.File
 }
 
-func NewCSVStorage(filepath string) (*CSVStorage, error) {
-	fileExists := false
-
-	if _, err := os.Stat(filepath); err == nil {
-		fileExists = true
+func NewCSVStorage(dirpath string) (*CSVStorage, error) {
+	if err := os.MkdirAll(dirpath, 0755); err != nil {
+		return nil, fmt.Errorf("ошибка при создании директории: %w", err)
 	}
 
-	file, err := os.OpenFile(filepath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	now := time.Now()
+	filename := now.Format("2006-01-02_15-04-05-000") + ".csv"
+
+	fullpath := filepath.Join(dirpath, filename)
+
+	file, err := os.OpenFile(fullpath, os.O_CREATE|os.O_WRONLY|os.O_EXCL, 0644)
 	if err != nil {
-		return nil, fmt.Errorf("ошибка при открытии файла: %w", err)
+		return nil, fmt.Errorf("ошибка при создании файла: %w", err)
 	}
 
 	writer := csv.NewWriter(file)
 
 	storage := &CSVStorage{
-		filepath: filepath,
+		filepath: fullpath,
 		writer:   writer,
-		file:     *file,
+		file:     file,
 	}
 
-	if !fileExists {
-		if err := storage.writeHeader(); err != nil {
-			file.Close()
-			return nil, err
-		}
+	if err := storage.writeHeader(); err != nil {
+		file.Close()
+		return nil, err
 	}
 
 	return storage, nil
