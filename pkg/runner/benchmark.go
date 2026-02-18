@@ -20,11 +20,12 @@ type BenchmarkRunner struct {
 	storage *storage.CSVStorage
 	queries []query.Query
 	timeout time.Duration
+	s3      *storage.S3Storage
 }
 
-func NewBenchmarkRunner(cfg *config.Config, connMgr *connection.ConnectionManager) (*BenchmarkRunner, error) {
+func NewBenchmarkRunner(cfg *config.Config, connMgr *connection.ConnectionManager, s3 *storage.S3Storage, filename string) (*BenchmarkRunner, error) {
 
-	st, err := storage.NewCSVStorage(cfg.ResultsPath)
+	st, err := storage.NewCSVStorage(cfg.ResultsPath, filename)
 	if err != nil {
 		return nil, fmt.Errorf("ошибка создания хранилища: %w", err)
 	}
@@ -50,6 +51,7 @@ func NewBenchmarkRunner(cfg *config.Config, connMgr *connection.ConnectionManage
 		storage: st,
 		queries: queries,
 		timeout: timeout,
+		s3:      s3,
 	}, nil
 
 }
@@ -88,7 +90,21 @@ func (br *BenchmarkRunner) Run() error {
 
 	}
 
+	if err := br.storage.Close(); err != nil {
+		return fmt.Errorf("ошибка при закрытии файла: %w", err)
+	}
 	log.Printf("тест завершен, результаты записаны в: %s", br.cfg.ResultsPath)
+
+	filePath := br.storage.GetFilePath()
+
+	if br.s3 != nil {
+		if err := br.s3.Upload(filePath); err != nil {
+			log.Printf("ошибка при загрузке файла в s3: %v", err)
+			return nil
+		}
+
+		log.Printf("файл успешно загружен в s3")
+	}
 	return nil
 }
 

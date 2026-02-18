@@ -30,6 +30,7 @@ type S3Config struct {
 	Bucket    string `yaml:"bucket"`
 	Enabled   bool   `yaml:"enabled"`
 	Region    string `yaml:"region"`
+	Prefix    string `yaml:"prefix"`
 }
 
 type WarehouseConfig struct {
@@ -124,6 +125,10 @@ func (c *Config) Validate() error {
 
 		if c.S3.Bucket == "" {
 			return fmt.Errorf("s3: bucket не установлен")
+		}
+
+		if c.S3.UseSSL && c.CertPath == "" {
+			return fmt.Errorf("путь к сертификату не установлен")
 		}
 	}
 

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"tpcds_benchmark/pkg/config"
+	"tpcds_benchmark/pkg/utils"
 
 	"github.com/trinodb/trino-go-client/trino"
 )
@@ -14,7 +15,7 @@ func (cm *ConnectionManager) ConnectTrino(cfg config.ConnectionConfig, schema st
 	var conn *sql.Conn
 
 	err := cm.retry(fmt.Sprintf("Trino(%s.%s)", cfg.Database, schema), func() error {
-		tlsConfig, err := loadTLSConfig(cm.certPath)
+		tlsConfig, err := utils.LoadTLSConfig(cm.certPath)
 		if err != nil {
 			return err
 		}

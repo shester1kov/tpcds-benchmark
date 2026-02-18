@@ -58,7 +58,7 @@
 
 - [x] Самопроверка: код соответствует спеку?
 - [x] Запусти `/own:done` — 6 Gates + code review
-- [ ] Запусти `/own:retro` — зафиксируй learnings
+- [x] Запусти `/own:retro` — зафиксируй learnings
 
 ## Прогресс
 

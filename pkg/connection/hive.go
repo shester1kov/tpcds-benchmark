@@ -3,6 +3,7 @@ package connection
 import (
 	"fmt"
 	"tpcds_benchmark/pkg/config"
+	"tpcds_benchmark/pkg/utils"
 
 	"github.com/beltran/gohive"
 )
@@ -12,7 +13,7 @@ func (cm *ConnectionManager) ConnectHive(cfg config.ConnectionConfig, engineType
 	var conn *gohive.Connection
 
 	err := cm.retry(fmt.Sprintf("Hive(%s)", database), func() error {
-		tlsConfig, err := loadTLSConfig(cm.certPath)
+		tlsConfig, err := utils.LoadTLSConfig(cm.certPath)
 
 		if err != nil {
 			return err

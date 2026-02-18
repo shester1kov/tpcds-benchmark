@@ -12,6 +12,8 @@ import (
 	"tpcds_benchmark/pkg/connection"
 	"tpcds_benchmark/pkg/executor"
 	"tpcds_benchmark/pkg/runner"
+	"tpcds_benchmark/pkg/storage"
+	"tpcds_benchmark/pkg/utils"
 )
 
 func main() {
@@ -33,6 +35,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("неверный retry_delay: %v", err)
 	}
+
+	filename := utils.GetFileName(cfg)
 
 	connMgr, err := connection.NewConnectionManager(
 		cfg.CertPath,
@@ -56,7 +60,17 @@ func main() {
 
 	log.Println("все экзекьюторы проверены успешно")
 
-	benchRunner, err := runner.NewBenchmarkRunner(cfg, connMgr)
+	var s3 *storage.S3Storage
+
+	if cfg.S3 != nil && cfg.S3.Enabled {
+
+		s3, err = storage.NewS3Storage(cfg.S3, cfg.CertPath)
+		if err != nil {
+			log.Fatalf("ошибка при создании s3 клиента: %v", err)
+		}
+	}
+
+	benchRunner, err := runner.NewBenchmarkRunner(cfg, connMgr, s3, filename)
 	if err != nil {
 		log.Fatalf("ошибка создания бенчмарка: %v", err)
 	}

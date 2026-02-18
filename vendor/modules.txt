@@ -13,6 +13,9 @@ github.com/beltran/gosasl
 # github.com/beltran/gssapi v0.0.0-20200324152954-d86554db4bab
 ## explicit
 github.com/beltran/gssapi
+# github.com/dustin/go-humanize v1.0.1
+## explicit; go 1.16
+github.com/dustin/go-humanize
 # github.com/elastic/go-sysinfo v1.8.1
 ## explicit; go 1.17
 github.com/elastic/go-sysinfo
@@ -26,9 +29,15 @@ github.com/elastic/go-sysinfo/types
 # github.com/elastic/go-windows v1.0.0
 ## explicit
 github.com/elastic/go-windows
+# github.com/go-ini/ini v1.67.0
+## explicit
+github.com/go-ini/ini
 # github.com/go-zookeeper/zk v1.0.4
 ## explicit; go 1.13
 github.com/go-zookeeper/zk
+# github.com/google/uuid v1.6.0
+## explicit
+github.com/google/uuid
 # github.com/hashicorp/go-uuid v1.0.3
 ## explicit
 github.com/hashicorp/go-uuid
@@ -86,21 +95,54 @@ github.com/jcmturner/rpc/v2/ndr
 # github.com/joeshaw/multierror v0.0.0-20140124173710-69b34d4ec901
 ## explicit
 github.com/joeshaw/multierror
-# github.com/klauspost/compress v1.18.1
+# github.com/klauspost/compress v1.18.2
 ## explicit; go 1.23
 github.com/klauspost/compress
 github.com/klauspost/compress/fse
 github.com/klauspost/compress/huff0
 github.com/klauspost/compress/internal/cpuinfo
 github.com/klauspost/compress/internal/le
+github.com/klauspost/compress/internal/race
 github.com/klauspost/compress/internal/snapref
+github.com/klauspost/compress/s2
 github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
+# github.com/klauspost/cpuid/v2 v2.2.11
+## explicit; go 1.22
+github.com/klauspost/cpuid/v2
+# github.com/klauspost/crc32 v1.3.0
+## explicit; go 1.23.0
+github.com/klauspost/crc32
+# github.com/minio/crc64nvme v1.1.1
+## explicit; go 1.22
+github.com/minio/crc64nvme
+# github.com/minio/md5-simd v1.1.2
+## explicit; go 1.14
+github.com/minio/md5-simd
+# github.com/minio/minio-go/v7 v7.0.98
+## explicit; go 1.24.0
+github.com/minio/minio-go/v7
+github.com/minio/minio-go/v7/pkg/cors
+github.com/minio/minio-go/v7/pkg/credentials
+github.com/minio/minio-go/v7/pkg/encrypt
+github.com/minio/minio-go/v7/pkg/kvcache
+github.com/minio/minio-go/v7/pkg/lifecycle
+github.com/minio/minio-go/v7/pkg/notification
+github.com/minio/minio-go/v7/pkg/replication
+github.com/minio/minio-go/v7/pkg/s3utils
+github.com/minio/minio-go/v7/pkg/set
+github.com/minio/minio-go/v7/pkg/signer
+github.com/minio/minio-go/v7/pkg/singleflight
+github.com/minio/minio-go/v7/pkg/sse
+github.com/minio/minio-go/v7/pkg/tags
 # github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db
 ## explicit
 # github.com/murfffi/gorich v0.2.0
 ## explicit; go 1.23.6
 github.com/murfffi/gorich/helperr
+# github.com/philhofer/fwd v1.2.0
+## explicit; go 1.20
+github.com/philhofer/fwd
 # github.com/pierrec/lz4 v2.6.1+incompatible
 ## explicit
 github.com/pierrec/lz4
@@ -113,6 +155,9 @@ github.com/pkg/errors
 github.com/prometheus/procfs
 # github.com/rivo/uniseg v0.4.7
 ## explicit; go 1.18
+# github.com/rs/xid v1.6.0
+## explicit; go 1.16
+github.com/rs/xid
 # github.com/samber/lo v1.51.0
 ## explicit; go 1.18
 github.com/samber/lo
@@ -133,6 +178,10 @@ github.com/sclgo/impala-go/internal/generated/types
 github.com/sclgo/impala-go/internal/hive
 github.com/sclgo/impala-go/internal/isql
 github.com/sclgo/impala-go/internal/sasl
+# github.com/tinylib/msgp v1.6.1
+## explicit; go 1.24
+github.com/tinylib/msgp/msgp
+github.com/tinylib/msgp/msgp/setof
 # github.com/trinodb/trino-go-client v0.333.0
 ## explicit; go 1.24.7
 github.com/trinodb/trino-go-client/trino
@@ -144,21 +193,30 @@ github.com/vertica/vertica-sql-go/logger
 github.com/vertica/vertica-sql-go/msgs
 github.com/vertica/vertica-sql-go/parse
 github.com/vertica/vertica-sql-go/rowcache
-# golang.org/x/crypto v0.45.0
+# go.yaml.in/yaml/v3 v3.0.4
+## explicit; go 1.16
+go.yaml.in/yaml/v3
+# golang.org/x/crypto v0.46.0
 ## explicit; go 1.24.0
+golang.org/x/crypto/argon2
+golang.org/x/crypto/blake2b
 golang.org/x/crypto/md4
 golang.org/x/crypto/pbkdf2
-# golang.org/x/net v0.47.0
+# golang.org/x/net v0.48.0
 ## explicit; go 1.24.0
+golang.org/x/net/http/httpguts
 golang.org/x/net/http2/hpack
+golang.org/x/net/idna
 golang.org/x/net/publicsuffix
-# golang.org/x/sys v0.38.0
+# golang.org/x/sys v0.39.0
 ## explicit; go 1.24.0
+golang.org/x/sys/cpu
+golang.org/x/sys/unix
 golang.org/x/sys/windows
 golang.org/x/sys/windows/registry
-# golang.org/x/term v0.37.0
+# golang.org/x/term v0.38.0
 ## explicit; go 1.24.0
-# golang.org/x/text v0.31.0
+# golang.org/x/text v0.32.0
 ## explicit; go 1.24.0
 golang.org/x/text/cases
 golang.org/x/text/internal
@@ -166,7 +224,9 @@ golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
 golang.org/x/text/language
+golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit

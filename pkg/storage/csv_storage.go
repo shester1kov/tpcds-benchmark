@@ -31,13 +31,10 @@ type CSVStorage struct {
 	file     *os.File
 }
 
-func NewCSVStorage(dirpath string) (*CSVStorage, error) {
+func NewCSVStorage(dirpath, filename string) (*CSVStorage, error) {
 	if err := os.MkdirAll(dirpath, 0755); err != nil {
 		return nil, fmt.Errorf("ошибка при создании директории: %w", err)
 	}
-
-	now := time.Now()
-	filename := now.Format("2006-01-02_15-04-05-000") + ".csv"
 
 	fullpath := filepath.Join(dirpath, filename)
 
@@ -60,6 +57,10 @@ func NewCSVStorage(dirpath string) (*CSVStorage, error) {
 	}
 
 	return storage, nil
+}
+
+func (s *CSVStorage) GetFilePath() string {
+	return s.filepath
 }
 
 func (s *CSVStorage) writeHeader() error {
