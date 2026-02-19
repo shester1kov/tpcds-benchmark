@@ -13,7 +13,7 @@ func GetFileName(cfg *config.Config) string {
 		cfg.Runs,
 		cfg.Concurrency,
 		cfg.Schema,
-		now.Format("2006-01-02_15:04:05.000"),
+		now.Format("2006-01-02_15_04_05.000"),
 		".csv",
 	)
 
