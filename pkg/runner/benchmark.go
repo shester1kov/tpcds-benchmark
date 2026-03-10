@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"sync"
 	"time"
 	"tpcds_benchmark/pkg/connection"
@@ -169,13 +170,28 @@ func (br *BenchmarkRunner) runWarehouse(wh config.WarehouseConfig) error {
 		}
 	}()
 
+	queriesThreads := make([][]query.Query, br.cfg.Concurrency)
+
+	for threadID := 0; threadID < br.cfg.Concurrency; threadID++ {
+		shuffled := make([]query.Query, len(br.queries))
+
+		copy(shuffled, br.queries)
+
+		rand.Shuffle(len(shuffled), func(i, j int) {
+			shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
+		})
+
+		queriesThreads[threadID] = shuffled
+
+	}
+
 	for threadID := 0; threadID < br.cfg.Concurrency; threadID++ {
 		wg.Add(1)
 
 		go func(threadID int, exec executor.QueryExecutor) {
 			defer wg.Done()
 
-			for _, q := range br.queries {
+			for _, q := range queriesThreads[threadID] {
 
 				for run := 1; run <= br.cfg.Runs; run++ {
 					completedMu.Lock()
