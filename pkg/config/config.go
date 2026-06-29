@@ -64,10 +64,16 @@ func (w *WarehouseConfig) GetSchemaName(baseSchema string) string {
 
 	schema := baseSchema
 
+	// вот тут добавлять префиксы
 	if w.StorageLocation == "s3" {
 		schema = schema + "_s3"
+	} else if w.StorageLocation == "ofs" {
+		schema = schema + "_ofs"
+	} else if w.StorageLocation == "o3fs" {
+		schema = schema + "_o3fs"
 	}
 
+	// вот тут добавлять табличные форматы
 	if w.TableType == "iceberg" {
 		schema = schema + "_iceberg"
 	}

@@ -76,4 +76,19 @@ tpcds all/
 
 testconn/*
 # OwnYourCode - personal career tracking
-ownyourcode/career/
+ownyourcode
+
+exportToHTML
+
+copy_to_s3.sh
+s3
+test.json
+hive_conn.py
+ozone_boto3_conn.py
+hive_conn copy.py
+spark_load_to_clickhouse.py
+.venv
+a.py
+avroread.py
+bronze_to_silver.py
+venv
